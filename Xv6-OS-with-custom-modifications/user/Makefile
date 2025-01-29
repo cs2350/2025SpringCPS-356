@@ -74,12 +74,13 @@ UPROGS=\
 	_testfs\
 	_testuser\
 	_testdevhello\
+	_ex\
 
 all: $(UPROGS)
 
 
 fs: ../README $(UPROGS)
-	pushd ../userbin; ln -f ../README ./README; ../mkfs fs.img ./README $(UPROGS); mv fs.img .. ; popd
+	pushd ../userbin; ln -f ../README ./README; ../mkfs fs.img README $(UPROGS); mv fs.img .. ; popd
 
 _%: %.o $(ULIB)
 	$(LD) $(LDFLAGS) -N -e main -Ttext 0 -o $@ $^
