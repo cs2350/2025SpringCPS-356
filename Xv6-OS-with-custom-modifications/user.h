@@ -34,6 +34,7 @@ char *strcpy(char *, const char *);
 void *memmove(void *, const void *, int);
 char *strchr(const char *, char c);
 int strcmp(const char *, const char *);
+int snprintf(char *outbuffer, int n, const char *fmt, ...);
 void printf(int, const char *, ...);
 char *gets(char *, int max);
 uint32_t strlen(const char *);
