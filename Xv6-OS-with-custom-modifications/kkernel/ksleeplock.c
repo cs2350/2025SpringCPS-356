@@ -7,7 +7,7 @@
 #include "param.h"
 #include "proc.h"
 #include "spinlock.h"
-#include "types.h"
+#include "xv6types.h"
 #include "x86.h"
 
 void initsleeplock(struct sleeplock *lk, char *name) {

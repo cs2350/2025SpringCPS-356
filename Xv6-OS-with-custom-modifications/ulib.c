@@ -1,6 +1,6 @@
 #include "fcntl.h"
 #include "stat.h"
-#include "types.h"
+#include "xv6types.h"
 #include "user.h"
 #include "x86.h"
 

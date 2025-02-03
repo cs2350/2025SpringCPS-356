@@ -1,5 +1,5 @@
 #include "stat.h"
-#include "types.h"
+#include "xv6types.h"
 #include "user.h"
 
 char buf[512];

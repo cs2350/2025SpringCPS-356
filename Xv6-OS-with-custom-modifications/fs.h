@@ -3,7 +3,7 @@
 #ifndef CBBF5F3F_A95E_4F20_8E1A_153561D385C4
 #define CBBF5F3F_A95E_4F20_8E1A_153561D385C4
 // Both the kernel and user programs use this header file.
-#include "types.h"
+#include "xv6types.h"
 
 #define ROOTINO 1 // root i-number
 #define BSIZE 512 // block size

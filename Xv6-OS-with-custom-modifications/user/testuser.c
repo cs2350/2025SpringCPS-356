@@ -5,7 +5,7 @@
 #include "stat.h"
 #include "syscall.h"
 #include "traps.h"
-#include "types.h"
+#include "xv6types.h"
 #include "user.h"
 
 char buf[8192];

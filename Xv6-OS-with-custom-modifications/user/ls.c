@@ -1,6 +1,6 @@
 #include "fs.h"
 #include "stat.h"
-#include "types.h"
+#include "xv6types.h"
 #include "user.h"
 
 char *fmtname(char *path) {
