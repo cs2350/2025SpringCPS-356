@@ -2,7 +2,7 @@
 
 #ifndef D32BCFCE_4820_4049_979A_46C312B45E0A
 #define D32BCFCE_4820_4049_979A_46C312B45E0A
-#include "types.h"
+#include "xv6types.h"
 
 struct mp {             // floating pointer
   uint8_t signature[4]; // "_MP_"

@@ -2,7 +2,7 @@
 
 #include "fcntl.h"
 #include "stat.h"
-#include "types.h"
+#include "xv6types.h"
 #include "user.h"
 
 char *argv[] = {"sh", 0};

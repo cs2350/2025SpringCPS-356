@@ -1,7 +1,7 @@
 // Shell.
 
 #include "fcntl.h"
-#include "types.h"
+#include "xv6types.h"
 #include "user.h"
 
 // Parsed command representation

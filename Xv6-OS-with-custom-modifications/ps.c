@@ -1,4 +1,4 @@
-#include "types.h"
+#include "xv6types.h"
 #include "stat.h"
 #include "user.h"
 #include "fcntl.h"

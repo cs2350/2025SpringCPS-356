@@ -3,7 +3,7 @@
 #include "mmu.h"
 #include "param.h"
 #include "proc.h"
-#include "types.h"
+#include "xv6types.h"
 #include "x86.h"
 
 static void startothers(void);

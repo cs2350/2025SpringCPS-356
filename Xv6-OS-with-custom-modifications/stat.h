@@ -4,7 +4,7 @@
 #define T_FILE 2 // File
 #define T_DEV 3  // Device
 
-#include "types.h"
+#include "xv6types.h"
 
 struct stat {
   short type;    // Type of file

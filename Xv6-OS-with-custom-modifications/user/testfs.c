@@ -10,7 +10,7 @@
 #include "fcntl.h"
 #include "fs.h"
 #include "stat.h"
-#include "types.h"
+#include "xv6types.h"
 #include "user.h"
 
 int main(int argc, char *argv[]) {

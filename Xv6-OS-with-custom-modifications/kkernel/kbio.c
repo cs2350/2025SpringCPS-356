@@ -24,7 +24,7 @@
 #include "param.h"
 #include "sleeplock.h"
 #include "spinlock.h"
-#include "types.h"
+#include "xv6types.h"
 
 struct {
   struct spinlock lock;

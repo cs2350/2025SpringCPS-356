@@ -4,7 +4,7 @@
 #include "mmu.h"
 #include "param.h"
 #include "proc.h"
-#include "types.h"
+#include "xv6types.h"
 #include "x86.h"
 
 // User code makes a system call with INT T_SYSCALL.

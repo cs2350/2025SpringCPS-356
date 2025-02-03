@@ -6,7 +6,7 @@
 #include "proc.h"
 #include "sleeplock.h"
 #include "spinlock.h"
-#include "types.h"
+#include "xv6types.h"
 
 #define PIPESIZE 512
 

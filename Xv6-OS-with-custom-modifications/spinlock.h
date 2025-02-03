@@ -2,7 +2,7 @@
 
 #ifndef B5E79D45_D2F7_4352_83DA_DED30AC163C4
 #define B5E79D45_D2F7_4352_83DA_DED30AC163C4
-#include "types.h"
+#include "xv6types.h"
 
 struct spinlock {
   uint32_t locked; // Is the lock held?
