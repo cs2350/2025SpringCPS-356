@@ -1,6 +1,6 @@
 This version is an extensively reorganized and modernized code base derived from xv6 described below:
 
-- All source files have been reformatted using clang-format to enfoce a single style.
+- All source files have been reformatted using clang-format to enforce a single style.
 - All compound statements have curly braces now and other coding practices have been improved using clang-tidy.
 - Kernel .c files are now in a kkernel directory and prefixed with 'k'.
 - User program .c files are now in a user directory
