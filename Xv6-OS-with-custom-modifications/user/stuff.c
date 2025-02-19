@@ -2,8 +2,9 @@
 #include "types.h"
 #include "user.h"
 
-int main(int argc, const char* argv[]) {
-    for(int i =0; i < 10000; ++i) {
-    printf(1, "Stuff\n");
-    }
+int main(int argc, const char *argv[]) {
+  const char* message = "Stuff\n"
+  for (int i = 0; i < 1000; ++i) {
+    write(1, message, 6);
+  }
 }
