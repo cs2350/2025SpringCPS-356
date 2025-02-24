@@ -76,6 +76,7 @@ UPROGS=\
 	_testuser\
 	_testdevhello\
 	_stuff\
+	_testflock\
 
 all: $(UPROGS)
 
