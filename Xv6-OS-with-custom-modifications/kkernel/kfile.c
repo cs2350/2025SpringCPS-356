@@ -21,7 +21,7 @@ int filelock(struct file *fp) {
   if (fp->ip == 0 || fp->ip->ref < 1) {
     status = -1;
   } else {
-    acquiresleep(&fp->ip->flock);
+    acquiresleep(&fp->ip->lock);
   }
 
   return status;
@@ -30,8 +30,8 @@ int filelock(struct file *fp) {
 int fileunlock(struct file *fp) {
   int status = -1;
 
-  if (fp->ip != 0 && holdingsleep(&fp->ip->flock) && !(fp->ip->ref < 1)) {
-    releasesleep(&fp->ip->flock);
+  if (fp->ip != 0 && holdingsleep(&fp->ip->lock) && !(fp->ip->ref < 1)) {
+    releasesleep(&fp->ip->lock);
     status = 0;
   }
 
