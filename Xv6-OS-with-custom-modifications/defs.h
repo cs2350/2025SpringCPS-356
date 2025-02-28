@@ -29,6 +29,9 @@ void panic(char *) __attribute__((noreturn));
 // dhello.c
 void helloinit(void);
 
+// dhello.c
+void upperinit(void);
+
 // exec.c
 int exec(char *, char **);
 
