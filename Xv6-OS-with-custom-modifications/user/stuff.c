@@ -8,11 +8,11 @@ int main(int argc, const char *argv[]) {
 
   const char* message = "Stuff\n";
   for (int i = 0; i < 1000; ++i) {
-    //flock(consoleLock);
+    flock(consoleLock);
     for(int j = 0; j < 7; ++j) {
       write(1, &message[j], 1);
     }
-    //funlock(consoleLock);
+    funlock(consoleLock);
   }
   close(consoleLock);
 }
