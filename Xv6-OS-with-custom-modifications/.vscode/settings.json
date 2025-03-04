@@ -2,6 +2,11 @@
     "files.associations": {
         "string.h": "c",
         "param.h": "c",
-        "file.h": "c"
+        "file.h": "c",
+        "mutex": "c",
+        "format": "c",
+        "memory": "c",
+        "semaphore": "c",
+        "stop_token": "c"
     }
 }
