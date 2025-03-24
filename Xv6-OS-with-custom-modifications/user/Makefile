@@ -74,7 +74,7 @@ UPROGS=\
 	_testfs\
 	_testuser\
 	_testdevhello\
-	_ex\
+	_useshared\
 
 all: $(UPROGS)
 
@@ -83,7 +83,7 @@ fs: ../README $(UPROGS)
 	pushd ../userbin; ln -f ../README ./README; ../mkfs fs.img README $(UPROGS); mv fs.img .. ; popd
 
 _%: %.o $(ULIB)
-	$(LD) $(LDFLAGS) -N -e main -Ttext 0 -o $@ $^
+	$(LD) $(LDFLAGS) -N -e main -Ttext 1000 -o $@ $^
 	$(OBJDUMP) -S $@ > $*.asm
 	$(OBJDUMP) -t $@ | sed '1,/SYMBOL TABLE/d; s/ .* / /; /^$$/d' > $*.sym
 	mv $@ ../userbin

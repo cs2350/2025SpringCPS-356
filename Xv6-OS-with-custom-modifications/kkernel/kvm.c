@@ -99,6 +99,8 @@ static int mappages(pde_t *pgdir, void *va, uint32_t size, uint32_t pa,
 // between V2P(end) and the end of physical memory (PHYSTOP)
 // (directly addressable from end..P2V(PHYSTOP)).
 
+#define SHARED_MEMORY_SIZE (1 << 12)
+
 // This table defines the kernel's mappings, which are present in
 // every process's page table.
 static struct kmap {
@@ -107,11 +109,32 @@ static struct kmap {
   uint32_t phys_end;
   int perm;
 } kmap[] = {
-    {(void *)KERNBASE, 0, EXTMEM, PTE_W},            // I/O space
-    {(void *)KERNLINK, V2P(KERNLINK), V2P(data), 0}, // kern text+rodata
-    {(void *)data, V2P(data), PHYSTOP, PTE_W},       // kern data+memory
-    {(void *)DEVSPACE, DEVSPACE, 0, PTE_W},          // more devices
+ { (void*)KERNBASE, 0,               EXTMEM,      PTE_W}, // I/O space
+ { (void*)KERNLINK, V2P_C(KERNLINK), V2P_C(data), 0},     // kern text+rodata
+ { (void*)data,     V2P_C(data),     PHYSTOP,     PTE_W}, // kern data+memory
+ { (void*)DEVSPACE, DEVSPACE,        0,           PTE_W}, // more devices
 };
+
+
+// Create a shared page at uva which ust also be a kva.
+void
+sharepteu(pde_t *pgdir, char *uva)
+{
+  pte_t *pte;
+
+  pte = walkpgdir(pgdir, uva, 1);
+  if(pte == 0)
+    panic("sharepteu");
+  *pte |= PTE_U|PTE_W;
+}
+
+/// This variable stores the address of the start of a page of
+/// kernel vurtual memory. Since every kernal page is mapped into
+/// user process virtual memory, the address is valid in user
+/// programs. Normally, even though kernel pages are mapped into
+/// user virtual memory, the kernal pages are protected to prevent
+/// unpriviledged user access. They are there but not accessible.
+static char * s_kvLastPageStart_p = 0;
 
 // Set up kernel part of a page table.
 pde_t *setupkvm(void) {
@@ -132,6 +155,16 @@ pde_t *setupkvm(void) {
       return 0;
     }
   }
+
+  k = &kmap[2]; // 2 is index of data area in kmap
+  int kvSize = k->phys_end - k->phys_start;
+  s_kvLastPageStart_p = ((char *)k->virt) + kvSize - (1 << 12);
+
+  // Make last page below PHYSTOP writablefrom user space
+  //sharepteu(pgdir, (char*)(PHYSTOP - (1 << 12)));
+  sharepteu(pgdir, s_kvLastPageStart_p);
+  cprintf("%x shared uv\n", s_kvLastPageStart_p);
+  
   return pgdir;
 }
 
