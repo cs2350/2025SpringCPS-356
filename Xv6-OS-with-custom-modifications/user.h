@@ -1,5 +1,8 @@
 #ifndef DA6E252B_1596_44C1_B0E2_CD15D533B981
 #define DA6E252B_1596_44C1_B0E2_CD15D533B981
+
+#include <pinfo.h>
+
 struct stat;
 struct rtcdate;
 
@@ -27,6 +30,11 @@ int sleep(int);
 int uptime(void);
 
 int shutdown(void);
+
+// This function returns information about processes know to the kernel.
+// information is returned in an array of pinfo. pinfo must point to at
+// least enough memory for numberOfEnties pinfos.
+int ps(int numberOfEntries, struct pinfo *arrayOfPInfo);
 
 // ulib.c
 int stat(const char *, struct stat *);

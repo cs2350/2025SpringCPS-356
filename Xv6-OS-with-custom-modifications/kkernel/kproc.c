@@ -6,6 +6,7 @@
 #include "spinlock.h"
 #include "types.h"
 #include "x86.h"
+#include "pinfo.h"
 
 struct {
   struct spinlock lock;
@@ -478,25 +479,28 @@ int kill(int pid) {
   return -1;
 }
 
+  /// The process state is used as an index into this table to obtain
+  /// a string name for teh corresponding process state
+  static const char *processStateToStringTable[] = {
+      [UNUSED] = "unused",   [EMBRYO] = "embryo",  [SLEEPING] = "sleep ",
+      [RUNNABLE] = "runble", [RUNNING] = "run   ", [ZOMBIE] = "zombie"};
+
 // PAGEBREAK: 36
 //  Print a process listing to console.  For debugging.
 //  Runs when user types ^P on console.
 //  No lock to avoid wedging a stuck machine further.
 void procdump(void) {
-  static char *states[] = {
-      [UNUSED] = "unused",   [EMBRYO] = "embryo",  [SLEEPING] = "sleep ",
-      [RUNNABLE] = "runble", [RUNNING] = "run   ", [ZOMBIE] = "zombie"};
   int i;
   struct proc *p;
-  char *state;
+  const char *state;
   uint32_t pc[10];
 
   for (p = ptable.proc; p < &ptable.proc[NPROC]; p++) {
     if (p->state == UNUSED) {
       continue;
     }
-    if (p->state >= 0 && p->state < NELEM(states) && states[p->state]) {
-      state = states[p->state];
+    if (p->state >= 0 && p->state < NELEM(processStateToStringTable) && processStateToStringTable[p->state]) {
+      state = processStateToStringTable[p->state];
     } else {
       state = "???";
     }
@@ -509,4 +513,33 @@ void procdump(void) {
     }
     cprintf("\n");
   }
+}
+
+int cps(int pinfosToReturnNumber, struct pinfo *pinfo_p)
+{
+  struct proc *p;
+  const char *stateStr;
+  int i = 0;
+
+  for (int pid = 0; i < pinfosToReturnNumber && pid < NPROC; ++pid)
+  {
+    p = &ptable.proc[pid];
+
+    if (p->state != UNUSED)
+    {
+      stateStr = "???";
+      if (p->state >= 0 && p->state < NELEM(processStateToStringTable) && processStateToStringTable[p->state])
+      {
+        stateStr = processStateToStringTable[p->state];
+      }
+
+      pinfo_p[i].pid = p->pid;
+      pinfo_p[i].priority = 0;
+      safestrcpy(pinfo_p[i].stateStr, stateStr, PINFO_STATE_STR_MAX_LEN);
+      safestrcpy(pinfo_p[i].programNameStr, p->name, PINFO_NAME_MAX_LEN);
+      i += 1;
+    }
+  }
+
+  return i;
 }
