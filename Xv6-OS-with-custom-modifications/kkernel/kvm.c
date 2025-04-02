@@ -10,6 +10,9 @@
 extern char data[]; // defined by kernel.ld
 pde_t *kpgdir;      // for use in scheduler()
 
+///
+static void s_setpteu(pde_t *pgdir, char *uva);
+
 // Set up CPU's kernel segment descriptors.
 // Run once on entry on each CPU.
 void seginit(void) {
@@ -132,6 +135,10 @@ pde_t *setupkvm(void) {
       return 0;
     }
   }
+  
+  cprintf("<%p> last page\n", (char*)(PHYSTOP - (1 << 12)));
+  s_setpteu(pgdir, (char*)(0x8dffe000));
+
   return pgdir;
 }
 
@@ -293,6 +300,18 @@ void freevm(pde_t *pgdir) {
     }
   }
   kfree((char *)pgdir);
+}
+
+// Clear PTE_U on a page. Used to create an inaccessible
+// page beneath the user stack.
+static void s_setpteu(pde_t *pgdir, char *uva) {
+  pte_t *pte;
+
+  pte = walkpgdir(pgdir, uva, 0);
+  if (pte == 0) {
+    panic("clearpteu");
+  }
+  *pte |= PTE_U;
 }
 
 // Clear PTE_U on a page. Used to create an inaccessible

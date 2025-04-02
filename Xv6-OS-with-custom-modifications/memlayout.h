@@ -4,7 +4,9 @@
 #define DA9A6709_87D0_42B6_9361_0FC8F6DC0A58
 
 #define EXTMEM 0x100000     // Start of extended memory
-#define PHYSTOP 0xE000000   // Top physical memory
+#define SHAREDSTOP 0xE000000   // Top physical memory
+#define SHAREDSIZE (1 << 12)   // Top physical memory
+#define PHYSTOP SHAREDSTOP-SHAREDSIZE   // Top physical memory
 #define DEVSPACE 0xFE000000 // Other devices are at high addresses
 
 // Key addresses for address space layout (see kmap in vm.c for layout)
