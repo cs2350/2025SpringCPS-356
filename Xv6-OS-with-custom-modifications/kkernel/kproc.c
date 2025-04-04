@@ -1,12 +1,12 @@
-#include "proc.h"
 #include "defs.h"
 #include "memlayout.h"
 #include "mmu.h"
 #include "param.h"
+#include "pinfo.h"
+#include "proc.h"
 #include "spinlock.h"
 #include "types.h"
 #include "x86.h"
-#include "pinfo.h"
 
 struct {
   struct spinlock lock;
@@ -64,46 +64,47 @@ struct proc *myproc(void) {
 //  state required to run in the kernel.
 //  Otherwise return 0.
 static struct proc *allocproc(void) {
-  struct proc *p;
-  char *sp;
-
+  struct proc *p = 0;
+ 
   acquire(&ptable.lock);
 
-  for (p = ptable.proc; p < &ptable.proc[NPROC]; p++) {
-    if (p->state == UNUSED) {
-      goto found;
+  for (uint32_t i = 0; (p == 0) && (NPROC > i); ++i) {
+    p = &ptable.proc[i];
+    if (p->state != UNUSED) {
+      p = 0;
     }
   }
 
-  release(&ptable.lock);
-  return 0;
+  if (0 == p) {
+    release(&ptable.lock);
+  } else {
+    p->state = EMBRYO;
+    p->pid = nextpid++;
+    p->ticksAtStart = ticks;
+    p->ticksScheduled = 0;
+    release(&ptable.lock);
 
-found:
-  p->state = EMBRYO;
-  p->pid = nextpid++;
+    // Allocate kernel stack.
+    if ((p->kstack = kalloc()) == 0) {
+      p->state = UNUSED;
+      return 0;
+    }
+    char *sp = sp = p->kstack + KSTACKSIZE;
 
-  release(&ptable.lock);
+    // Leave room for trap frame.
+    sp -= sizeof *p->tf;
+    p->tf = (struct trapframe *)sp;
 
-  // Allocate kernel stack.
-  if ((p->kstack = kalloc()) == 0) {
-    p->state = UNUSED;
-    return 0;
+    // Set up new context to start executing at forkret,
+    // which returns to trapret.
+    sp -= 4;
+    *(uint32_t *)sp = (uint32_t)trapret;
+
+    sp -= sizeof *p->context;
+    p->context = (struct context *)sp;
+    memset(p->context, 0, sizeof *p->context);
+    p->context->eip = (uint32_t)forkret;
   }
-  sp = p->kstack + KSTACKSIZE;
-
-  // Leave room for trap frame.
-  sp -= sizeof *p->tf;
-  p->tf = (struct trapframe *)sp;
-
-  // Set up new context to start executing at forkret,
-  // which returns to trapret.
-  sp -= 4;
-  *(uint32_t *)sp = (uint32_t)trapret;
-
-  sp -= sizeof *p->context;
-  p->context = (struct context *)sp;
-  memset(p->context, 0, sizeof *p->context);
-  p->context->eip = (uint32_t)forkret;
 
   return p;
 }
@@ -320,7 +321,7 @@ void scheduler(void) {
 
     // Loop over process table looking for process to run.
     acquire(&ptable.lock);
-    for( int i = 0; i < NPROC; ++i) {
+    for (int i = 0; i < NPROC; ++i) {
       struct proc *p = &ptable.proc[i];
       if (p->state == RUNNABLE) {
         // Switch to chosen process.  It is the process's job
@@ -329,7 +330,13 @@ void scheduler(void) {
         c->proc = p;
         switchuvm(p);
         p->state = RUNNING;
+        p->ticksScheduled += 1;
 
+        static uint32_t arbitraryTickSpan = 320;
+        if(arbitraryTickSpan < p->ticksScheduled) {
+          p->ticksScheduled = 0;
+          p->ticksAtStart = ticks;
+        }
         swtch(&(c->scheduler), p->context);
         switchkvm();
 
@@ -337,7 +344,6 @@ void scheduler(void) {
         // It should have changed its p->state before coming back.
         c->proc = 0;
       }
-
     }
     release(&ptable.lock);
   }
@@ -479,11 +485,11 @@ int kill(int pid) {
   return -1;
 }
 
-  /// The process state is used as an index into this table to obtain
-  /// a string name for teh corresponding process state
-  static const char *processStateToStringTable[] = {
-      [UNUSED] = "unused",   [EMBRYO] = "embryo",  [SLEEPING] = "sleep ",
-      [RUNNABLE] = "runble", [RUNNING] = "run   ", [ZOMBIE] = "zombie"};
+/// The process state is used as an index into this table to obtain
+/// a string name for teh corresponding process state
+static const char *processStateToStringTable[] = {
+    [UNUSED] = "unused",   [EMBRYO] = "embryo",  [SLEEPING] = "sleep ",
+    [RUNNABLE] = "runble", [RUNNING] = "run   ", [ZOMBIE] = "zombie"};
 
 // PAGEBREAK: 36
 //  Print a process listing to console.  For debugging.
@@ -499,7 +505,8 @@ void procdump(void) {
     if (p->state == UNUSED) {
       continue;
     }
-    if (p->state >= 0 && p->state < NELEM(processStateToStringTable) && processStateToStringTable[p->state]) {
+    if (p->state >= 0 && p->state < NELEM(processStateToStringTable) &&
+        processStateToStringTable[p->state]) {
       state = processStateToStringTable[p->state];
     } else {
       state = "???";
@@ -515,26 +522,29 @@ void procdump(void) {
   }
 }
 
-int cps(int pinfosToReturnNumber, struct pinfo *pinfo_p)
-{
+int cps(int pinfosToReturnNumber, struct pinfo *pinfo_p) {
   struct proc *p;
   const char *stateStr;
   int i = 0;
 
-  for (int pid = 0; i < pinfosToReturnNumber && pid < NPROC; ++pid)
-  {
+  for (int pid = 0; i < pinfosToReturnNumber && pid < NPROC; ++pid) {
     p = &ptable.proc[pid];
 
-    if (p->state != UNUSED)
-    {
+    if (p->state != UNUSED) {
       stateStr = "???";
-      if (p->state >= 0 && p->state < NELEM(processStateToStringTable) && processStateToStringTable[p->state])
-      {
+      if (p->state >= 0 && p->state < NELEM(processStateToStringTable) &&
+          processStateToStringTable[p->state]) {
         stateStr = processStateToStringTable[p->state];
       }
 
+      uint32_t elpsedTicksFromStart = ticks - p->ticksAtStart;
+      uint8_t percent = 0;
+      if(0 != elpsedTicksFromStart) {
+        percent = (uint8_t)(100 * p->ticksScheduled / elpsedTicksFromStart);
+      }
       pinfo_p[i].pid = p->pid;
       pinfo_p[i].priority = 0;
+      pinfo_p[i].cpuPercent = percent;
       safestrcpy(pinfo_p[i].stateStr, stateStr, PINFO_STATE_STR_MAX_LEN);
       safestrcpy(pinfo_p[i].programNameStr, p->name, PINFO_NAME_MAX_LEN);
       i += 1;

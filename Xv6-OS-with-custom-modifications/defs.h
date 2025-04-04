@@ -195,9 +195,9 @@ int copyout(pde_t *, uint32_t, void *, uint32_t);
 void clearpteu(pde_t *pgdir, char *uva);
 
 // kshutdown.c
-void            shutdown(void);
+void shutdown(void);
 
-/// Kernel portion of ps system call to return information about 
+/// Kernel portion of ps system call to return information about
 /// existing processes to a user program
 ///
 /// \param[in] pinfosToReturnNumber : The maximum number of structures

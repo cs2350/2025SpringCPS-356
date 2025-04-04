@@ -46,15 +46,13 @@ struct segdesc {
 // Normal segment
 #define SEG(type, base, lim, dpl)                                              \
   (struct segdesc) {                                                           \
-    ((lim) >> 12) & 0xffff, (int)(base) & 0xffff,                         \
-        ((int)(base) >> 16) & 0xff, type, 1, dpl, 1,                      \
-        (int)(lim) >> 28, 0, 0, 1, 1, (int)(base) >> 24              \
+    ((lim) >> 12) & 0xffff, (int)(base) & 0xffff, ((int)(base) >> 16) & 0xff,  \
+        type, 1, dpl, 1, (int)(lim) >> 28, 0, 0, 1, 1, (int)(base) >> 24       \
   }
 #define SEG16(type, base, lim, dpl)                                            \
   (struct segdesc) {                                                           \
-    (lim) & 0xffff, (int)(base) & 0xffff,                                 \
-        ((int)(base) >> 16) & 0xff, type, 1, dpl, 1,                      \
-        (int)(lim) >> 16, 0, 0, 1, 0, (int)(base) >> 24              \
+    (lim) & 0xffff, (int)(base) & 0xffff, ((int)(base) >> 16) & 0xff, type, 1, \
+        dpl, 1, (int)(lim) >> 16, 0, 0, 1, 0, (int)(base) >> 24                \
   }
 #endif
 
@@ -113,43 +111,43 @@ typedef int pte_t;
 
 // Task state segment format
 struct taskstate {
-  int link:32; // Old ts selector
-  int esp0:32; // Stack pointers and segment selectors
-  int ss0:16;  //   after an increase in privilege level
-  int padding1:16;
-  int esp1:32;
-  int ss1:16;
-  int padding2:16;
-  int esp2:32;
-  int ss2:16;
-  int padding3:16;
-  void *cr3;     // Page directory base
-  int eip:32; // Saved state from last task switch
-  int eflags:32;
-  int eax:32; // More saved state (registers)
-  int ecx:32;
-  int edx:32;
-  int ebx:32;
-  int esp:32;
-  int ebp:32;
-  int esi:32;
-  int edi:32;
-  int es:16; // Even more saved state (segment selectors)
-  int padding4:16;
-  int cs:16;
-  int padding5:16;
-  int ss:16;
-  int padding6:16;
-  int ds:16;
-  int padding7:16;
-  int fs:16;
-  int padding8:16;
-  int gs:16;
-  int padding9:16;
-  int ldt:16;
-  int padding10:16;
-  int t:16;    // Trap on task switch
-  int iomb:16; // I/O map base address
+  int link : 32; // Old ts selector
+  int esp0 : 32; // Stack pointers and segment selectors
+  int ss0 : 16;  //   after an increase in privilege level
+  int padding1 : 16;
+  int esp1 : 32;
+  int ss1 : 16;
+  int padding2 : 16;
+  int esp2 : 32;
+  int ss2 : 16;
+  int padding3 : 16;
+  void *cr3;    // Page directory base
+  int eip : 32; // Saved state from last task switch
+  int eflags : 32;
+  int eax : 32; // More saved state (registers)
+  int ecx : 32;
+  int edx : 32;
+  int ebx : 32;
+  int esp : 32;
+  int ebp : 32;
+  int esi : 32;
+  int edi : 32;
+  int es : 16; // Even more saved state (segment selectors)
+  int padding4 : 16;
+  int cs : 16;
+  int padding5 : 16;
+  int ss : 16;
+  int padding6 : 16;
+  int ds : 16;
+  int padding7 : 16;
+  int fs : 16;
+  int padding8 : 16;
+  int gs : 16;
+  int padding9 : 16;
+  int ldt : 16;
+  int padding10 : 16;
+  int t : 16;    // Trap on task switch
+  int iomb : 16; // I/O map base address
 };
 
 // Gate descriptors for interrupts and traps
@@ -175,7 +173,7 @@ struct gatedesc {
 //        this interrupt/trap gate explicitly using an int instruction.
 #define SETGATE(gate, istrap, sel, off, d)                                     \
   {                                                                            \
-    (gate).off_15_0 = (int)(off) & 0xffff;                                \
+    (gate).off_15_0 = (int)(off) & 0xffff;                                     \
     (gate).cs = (sel);                                                         \
     (gate).args = 0;                                                           \
     (gate).rsv1 = 0;                                                           \
@@ -183,7 +181,7 @@ struct gatedesc {
     (gate).s = 0;                                                              \
     (gate).dpl = (d);                                                          \
     (gate).p = 1;                                                              \
-    (gate).off_31_16 = (int)(off) >> 16;                                  \
+    (gate).off_31_16 = (int)(off) >> 16;                                       \
   }
 
 #endif

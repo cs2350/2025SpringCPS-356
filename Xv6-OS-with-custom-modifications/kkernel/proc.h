@@ -39,23 +39,32 @@ struct context {
   uint32_t eip;
 };
 
-enum procstate { UNUSED, EMBRYO, SLEEPING, RUNNABLE, RUNNING, ZOMBIE };
+enum procstate {
+  UNUSED = 0,
+  EMBRYO = 1,
+  SLEEPING = 2,
+  RUNNABLE = 3,
+  RUNNING = 4,
+  ZOMBIE = 5
+};
 
 // Per-process state
 struct proc {
-  uint32_t sz;                // Size of process memory (bytes)
-  pde_t *pgdir;               // Page table
-  char *kstack;               // Bottom of kernel stack for this process
-  enum procstate state;       // Process state
-  int pid;                    // Process ID
-  struct proc *parent;        // Parent process
-  struct trapframe *tf;       // Trap frame for current syscall
-  struct context *context;    // swtch() here to run process
-  void *chan;                 // If non-zero, sleeping on chan
-  int killed;                 // If non-zero, have been killed
-  struct file *ofile[NOFILE]; // Open files
-  struct inode *cwd;          // Current directory
-  char name[16];              // Process name (debugging)
+  uint32_t sz;                ///<- Size of process memory (bytes)
+  pde_t *pgdir;               ///<- Page table
+  char *kstack;               ///<- Bottom of kernel stack for this process
+  enum procstate state;       ///<- Process state
+  int32_t pid;                ///<- Process ID
+  struct proc *parent;        ///<- Parent process
+  struct trapframe *tf;       ///<- Trap frame for current syscall
+  struct context *context;    ///<- swtch() here to run process
+  void *chan;                 ///<- If non-zero, sleeping on chan
+  int32_t killed;             ///<- If non-zero, have been killed
+  struct file *ofile[NOFILE]; ///<- Open files
+  struct inode *cwd;          ///<- Current directory
+  char name[16];              ///<- Process name (debugging)
+  uint32_t ticksAtStart;      ///<- value of tick when process created
+  uint32_t ticksScheduled;    ///<- Number of ticks when process set to run
 };
 
 // Process memory is laid out contiguously, low addresses first:
