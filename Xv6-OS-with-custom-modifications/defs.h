@@ -13,6 +13,7 @@ struct spinlock;
 struct sleeplock;
 struct stat;
 struct superblock;
+struct pinfo;
 
 // bio.c
 void binit(void);
@@ -195,6 +196,17 @@ void clearpteu(pde_t *pgdir, char *uva);
 
 // kshutdown.c
 void            shutdown(void);
+
+/// Kernel portion of ps system call to return information about 
+/// existing processes to a user program
+///
+/// \param[in] pinfosToReturnNumber : The maximum number of structures
+/// to copy into user buffer, pinfo_p.
+/// \param[in] pinf_p : Pointer to a user buffer at least lareg enough
+/// to store pinfosToReturnNumber pinfo structures.
+///
+/// \return The number of pinfo structures actually copied into pinfo_p
+int cps(int pinfosToReturnNumber, struct pinfo *pinfo_p);
 
 // number of elements in fixed-size array
 #define NELEM(x) (sizeof(x) / sizeof((x)[0]))

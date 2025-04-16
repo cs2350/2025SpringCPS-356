@@ -74,7 +74,8 @@ UPROGS=\
 	_testfs\
 	_testuser\
 	_testdevhello\
-	_ex\
+	_ps\
+	_long\
 
 all: $(UPROGS)
 
