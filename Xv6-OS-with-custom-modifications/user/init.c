@@ -1,5 +1,6 @@
 // init: The initial user-level program
 
+#include "file.h"
 #include "fcntl.h"
 #include "stat.h"
 #include "types.h"
@@ -20,9 +21,17 @@ int main(void) {
   dup(0); // stderr
 
   // Only 10 device major numbers are allowed by param.h
+  int upperfd = open("dev/upper", O_RDWR);
+  if(upperfd < 0){
+    mknod("dev/upper", UPPER, 1); // UPPER is major number, 1 is minor number 
+    upperfd = open("dev/upper", O_RDWR);
+  }
+  close(upperfd);
+
+  // Only 10 device major numbers are allowed by param.h
   int hellofd = open("dev/hello", O_RDWR);
   if(hellofd < 0){
-    mknod("dev/hello", 7, 1); // 7 is major number, 1 is minor number 
+    mknod("dev/hello", HELLO, 1); // HELLO is major number, 1 is minor number 
     hellofd = open("dev/hello", O_RDWR);
   }
   close(hellofd);
