@@ -2,7 +2,7 @@
 #define BF68B728_9BB0_4332_970D_840C23BD69D6
 #include "fs.h"
 #include "sleeplock.h"
-#include "types.h"
+#include "xv6types.h"
 
 struct buf {
   int flags;

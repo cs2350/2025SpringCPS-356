@@ -4,7 +4,7 @@
 
 #include "defs.h"
 #include "traps.h"
-#include "types.h"
+#include "xv6types.h"
 
 #define IOAPIC 0xFEC00000 // Default physical address of IO APIC
 

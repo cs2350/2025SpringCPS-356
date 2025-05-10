@@ -1,4 +1,4 @@
-#include "types.h"
+#include "xv6types.h"
 #include "x86.h"
 
 void *memset(void *dst, int c, uint32_t n) {

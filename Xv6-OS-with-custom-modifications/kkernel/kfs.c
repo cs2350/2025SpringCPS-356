@@ -19,7 +19,7 @@
 #include "sleeplock.h"
 #include "spinlock.h"
 #include "stat.h"
-#include "types.h"
+#include "xv6types.h"
 
 #define min(a, b) ((a) < (b) ? (a) : (b))
 static void itrunc(struct inode *);

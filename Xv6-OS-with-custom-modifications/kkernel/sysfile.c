@@ -14,7 +14,7 @@
 #include "sleeplock.h"
 #include "spinlock.h"
 #include "stat.h"
-#include "types.h"
+#include "xv6types.h"
 
 // Fetch the nth word-sized system call argument as a file descriptor
 // and return both the descriptor and the corresponding struct file.

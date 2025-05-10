@@ -1,6 +1,6 @@
 #include "kbd.h"
 #include "defs.h"
-#include "types.h"
+#include "xv6types.h"
 #include "x86.h"
 
 int kbdgetc(void) {

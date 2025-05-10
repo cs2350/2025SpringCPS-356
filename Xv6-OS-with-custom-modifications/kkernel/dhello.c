@@ -1,6 +1,6 @@
 // "hello" device driver"
 
-#include "types.h"
+#include "xv6types.h"
 #include "defs.h"
 #include "param.h" // for NDEV
 #include "traps.h"

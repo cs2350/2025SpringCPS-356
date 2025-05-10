@@ -10,7 +10,7 @@
 #include "sleeplock.h"
 #include "spinlock.h"
 #include "traps.h"
-#include "types.h"
+#include "xv6types.h"
 #include "x86.h"
 
 extern uint8_t _binary_fs_img_start[], _binary_fs_img_size[];

@@ -1,6 +1,6 @@
 /* Kernel part of shutdown/poweroff support */
 
-#include "types.h"
+#include "xv6types.h"
 #include "x86.h"
 #include "defs.h"
 

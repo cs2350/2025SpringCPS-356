@@ -7,7 +7,7 @@
 #include "mmu.h"
 #include "param.h"
 #include "traps.h"
-#include "types.h"
+#include "xv6types.h"
 #include "x86.h"
 
 // Local APIC registers, divided by 4 for use as uint32_t[] indices.

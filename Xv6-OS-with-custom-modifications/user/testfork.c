@@ -2,7 +2,7 @@
 // Tiny executable so that the limit can be filling the proc table.
 
 #include "stat.h"
-#include "types.h"
+#include "xv6types.h"
 #include "user.h"
 
 #define N 1000

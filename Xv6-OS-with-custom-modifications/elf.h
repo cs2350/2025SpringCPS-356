@@ -2,7 +2,7 @@
 
 #ifndef E0A33307_2E24_42E8_8B33_E14498912B6E
 #define E0A33307_2E24_42E8_8B33_E14498912B6E
-#include "types.h"
+#include "xv6types.h"
 
 #define ELF_MAGIC 0x464C457FU // "\x7FELF" in little endian
 

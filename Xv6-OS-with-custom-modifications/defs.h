@@ -1,6 +1,6 @@
 #ifndef F2A88E5D_2F16_4549_BD3C_4EB0A7AB1FA4
 #define F2A88E5D_2F16_4549_BD3C_4EB0A7AB1FA4
-#include "types.h"
+#include "xv6types.h"
 
 struct buf;
 struct context;

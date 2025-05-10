@@ -10,7 +10,7 @@
 #include "sleeplock.h"
 #include "spinlock.h"
 #include "traps.h"
-#include "types.h"
+#include "xv6types.h"
 #include "x86.h"
 
 #define SECTOR_SIZE 512

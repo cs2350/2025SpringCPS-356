@@ -2,7 +2,7 @@
 
 #ifndef C82F174C_51A0_4FBC_A82C_7FD2D2E6CB48
 #define C82F174C_51A0_4FBC_A82C_7FD2D2E6CB48
-#include "types.h"
+#include "xv6types.h"
 
 #define KBSTATP 0x64 // kbd controller status port(I)
 #define KBS_DIB 0x01 // kbd data in buffer

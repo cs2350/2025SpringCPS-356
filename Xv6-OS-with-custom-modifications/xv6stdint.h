@@ -15,6 +15,8 @@
 #ifndef _SYS_STDINT_H_
 #define _SYS_STDINT_H_
 
+#ifndef INT8_MIN
+
 #include "cdefs.h"
 
 /*	$OpenBSD: _types.h,v 1.3 2006/02/14 18:12:58 miod Exp $	*/
@@ -209,6 +211,7 @@ typedef __uintmax_t uintmax_t;
  */
 
 /* 7.18.2.1 Limits of exact-width integer types */
+
 #define INT8_MIN (-0x7f - 1)
 #define INT16_MIN (-0x7fff - 1)
 #define INT32_MIN (-0x7fffffff - 1)
@@ -329,5 +332,7 @@ typedef __uintmax_t uintmax_t;
 /* 7.18.4.2 Macros for greatest-width integer constants. */
 #define INTMAX_C(_c) __CONCAT(_c, LL)
 #define UINTMAX_C(_c) __CONCAT(_c, ULL)
+
+#endif /* INT8_MIN */
 
 #endif /* _SYS_STDINT_H_ */

@@ -2,7 +2,7 @@
 // must be reparented at exit.
 
 #include "stat.h"
-#include "types.h"
+#include "xv6types.h"
 #include "user.h"
 
 int main(void) {

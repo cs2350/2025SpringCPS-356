@@ -7,7 +7,7 @@
 #include "mmu.h"
 #include "param.h"
 #include "spinlock.h"
-#include "types.h"
+#include "xv6types.h"
 
 void freerange(void *vstart, void *vend);
 extern char end[]; // first address after kernel loaded from ELF file

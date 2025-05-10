@@ -5,7 +5,7 @@
 #include "proc.h"
 #include "spinlock.h"
 #include "traps.h"
-#include "types.h"
+#include "xv6types.h"
 #include "x86.h"
 
 // Interrupt descriptor table (shared by all CPUs).

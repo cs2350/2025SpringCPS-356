@@ -4,7 +4,7 @@
 #define FACE65AA_AA1A_40A7_9E0D_2FB09BAF0820
 #include "mmu.h"   // taskstate
 #include "param.h" // NCPU
-#include "types.h"
+#include "xv6types.h"
 
 struct cpu {
   uint8_t apicid;            // Local APIC ID
